@@ -17,7 +17,9 @@ import java.net.URL;
  * Created by kubox on 2016/10/12.
  */
 
-public class AuthApi extends AsyncTask<URL, Void, Void> {
+public class AuthApi extends AsyncTask<URL, Void, String> {
+
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -25,14 +27,15 @@ public class AuthApi extends AsyncTask<URL, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(URL... urls) {
+    protected String doInBackground(URL... urls) {
         final URL url = urls[0];
         HttpURLConnection con = null;
+        String result = "";
         try {
             con = (HttpURLConnection) url.openConnection();
             String str = InputStreamToString(con.getInputStream());
             JSONObject json = new JSONObject(str);
-            Log.d("test", json.get("result").toString());
+            result = json.get("result").toString();
         } catch (IOException e) {
             e.printStackTrace();
         }catch(JSONException e){
@@ -42,8 +45,15 @@ public class AuthApi extends AsyncTask<URL, Void, Void> {
                 con.disconnect();
             }
         }
-        return null;
+        return result;
     }
+
+    @Override
+    protected void onPostExecute(String result) {
+        Log.d("TEST===", result);
+    }
+
+
 
     // InputStream -> String
     static String InputStreamToString(InputStream is) throws IOException {
@@ -56,6 +66,4 @@ public class AuthApi extends AsyncTask<URL, Void, Void> {
         br.close();
         return sb.toString();
     }
-
-
 }
