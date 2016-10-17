@@ -14,12 +14,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by kubox on 2016/10/12.
+ * Created by kubox on 2016/10/17.
  */
 
-public class AuthApi extends AsyncTask<URL, Void, String> {
 
-
+public class PostItemApi extends AsyncTask<URL, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -28,11 +27,13 @@ public class AuthApi extends AsyncTask<URL, Void, String> {
 
     @Override
     protected String doInBackground(URL... urls) {
-        final URL url = urls[0];
+
         HttpURLConnection con = null;
         String result = "";
         try {
+            final URL url = new URL("http://dev.domus.jp/kubox/practice/public/item");
             con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
             String str = InputStreamToString(con.getInputStream());
             JSONObject json = new JSONObject(str);
             result = json.get("result").toString();
@@ -66,3 +67,4 @@ public class AuthApi extends AsyncTask<URL, Void, String> {
         return sb.toString();
     }
 }
+

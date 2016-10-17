@@ -3,6 +3,7 @@ package jp.co.a328w.kubox.learningjson;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,12 +15,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by kubox on 2016/10/12.
+ * DB内全データを削除する
+ * Created by kubox on 2016/10/17.
  */
 
-public class AuthApi extends AsyncTask<URL, Void, String> {
-
-
+public class DeleteApi extends AsyncTask<URL, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -28,17 +28,16 @@ public class AuthApi extends AsyncTask<URL, Void, String> {
 
     @Override
     protected String doInBackground(URL... urls) {
-        final URL url = urls[0];
+
         HttpURLConnection con = null;
         String result = "";
         try {
+            final URL url = new URL("http://dev.domus.jp/kubox/practice/public/items");
             con = (HttpURLConnection) url.openConnection();
-            String str = InputStreamToString(con.getInputStream());
-            JSONObject json = new JSONObject(str);
-            result = json.get("result").toString();
+            con.setRequestMethod("DELETE");
+            result = InputStreamToString(con.getInputStream());
+
         } catch (IOException e) {
-            e.printStackTrace();
-        }catch(JSONException e){
             e.printStackTrace();
         } finally {
             if (con != null) {
@@ -50,6 +49,15 @@ public class AuthApi extends AsyncTask<URL, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+
+        JSONObject json;
+
+        try {
+            json = new JSONObject(result);
+        }catch(JSONException ex){
+
+        }
+
         Log.d("TEST===", result);
     }
 

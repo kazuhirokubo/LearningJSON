@@ -3,6 +3,9 @@ package jp.co.a328w.kubox.learningjson;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,14 +15,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by kubox on 2016/10/12.
+ * Created by kubox on 2016/10/17.
  */
 
-public class AuthApi extends AsyncTask<URL, Void, String> {
-
-
+public class GetItemsApi extends AsyncTask<URL, Void, String> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -28,18 +31,17 @@ public class AuthApi extends AsyncTask<URL, Void, String> {
 
     @Override
     protected String doInBackground(URL... urls) {
-        final URL url = urls[0];
+
         HttpURLConnection con = null;
         String result = "";
         try {
+            final URL url = new URL("http://dev.domus.jp/kubox/practice/public/items");
             con = (HttpURLConnection) url.openConnection();
-            String str = InputStreamToString(con.getInputStream());
-            JSONObject json = new JSONObject(str);
-            result = json.get("result").toString();
+            result = InputStreamToString(con.getInputStream());
+
         } catch (IOException e) {
             e.printStackTrace();
-        }catch(JSONException e){
-            e.printStackTrace();
+
         } finally {
             if (con != null) {
                 con.disconnect();
@@ -50,7 +52,11 @@ public class AuthApi extends AsyncTask<URL, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Log.d("TEST===", result);
+        Gson gson = new Gson();
+        List<Item> itemList = new ArrayList<Item>();
+        itemList = gson.fromJson(result, new TypeToken<List<Item>>() {}.getType());
+
+        Log.d("test", "da");
     }
 
 
