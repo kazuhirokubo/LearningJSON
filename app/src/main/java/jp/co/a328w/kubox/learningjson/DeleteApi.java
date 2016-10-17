@@ -1,12 +1,8 @@
 package jp.co.a328w.kubox.learningjson;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,19 +10,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 /**
- * Created by kubox on 2016/10/12.
+ * Created by kubox on 2016/10/17.
  */
 
-public class AuthApi extends AsyncTask<String, Void, String> {
-
-
-    public AsyncResponse delegate = null;
-
-    public AuthApi(AsyncResponse asyncResponse) {
-        delegate = asyncResponse;
-    }
+public class DeleteApi extends AsyncTask<Void, Void, String> {
 
     @Override
     protected void onPreExecute() {
@@ -35,14 +25,13 @@ public class AuthApi extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... pass) {
-
-//        Log.d("==========", "http://dev.domus.jp/kubox/practice/public/auth/" + pass[0]);
+    protected String doInBackground(Void... params) {
 
         HttpURLConnection con = null;
         String result = "";
         try {
-            con = (HttpURLConnection) new URL("http://dev.domus.jp/kubox/practice/public/auth/" + pass[0]).openConnection();
+            con = (HttpURLConnection) new URL("http://dev.domus.jp/kubox/practice/public/items").openConnection();
+            con.setRequestMethod("DELETE");
             result = InputStreamToString(con.getInputStream());
 
         } catch (IOException e) {
@@ -60,8 +49,8 @@ public class AuthApi extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String result) {
 
         Gson gson = new Gson();
-        Result res = gson.fromJson(result, Result.class);
-        delegate.processFinish(res);
+        Result str = gson.fromJson(result, Result.class);
+
     }
 
 

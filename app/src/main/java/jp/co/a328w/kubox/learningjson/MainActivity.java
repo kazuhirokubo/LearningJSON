@@ -15,18 +15,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AuthApi auth =new AuthApi(new AsyncResponse() {
 
-        try {
+            @Override
+            public void processFinish(Result output) {
+                Log.d("!!=====test=====!!", output.result);
+            }
+        });
+        auth.execute("1234");
 
-            new AuthApi().execute(new URL("http://dev.domus.jp/kubox/practice/public/auth/1234"));
-
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-//        new AlertDialog.Builder(this).setTitle("エラー")
-//            .setMessage("認証エラー")
-//            .setPositiveButton("OK", null)
-//            .show();
     }
 }
